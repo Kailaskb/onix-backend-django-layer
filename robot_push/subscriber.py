@@ -2,19 +2,29 @@
 
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from onix_backend_messages.msg import StatusData
 import json
 
-class MinimalSubscriber(Node):
+class StatusDataSubscriber(Node):
     latest_ros_data = None
 
     def __init__(self):
-        super().__init__('py_sub_spiral_node')
-        self.subscriber_ = self.create_subscription(Twist, 'turtle1/cmd_vel', self.subscribe_message, 1)
+        super().__init__('status_data_subscriber')
+        self.subscriber_ = self.create_subscription(StatusData, 'status_data', self.subscribe_message, 1)
 
     def subscribe_message(self, msg):
-        self.get_logger().info('Received - Linear Velocity: %f, Angular Velocity: %f' % (msg.linear.x, msg.angular.z))
-        self.latest_ros_data = {'linear': msg.linear.x, 'angular': msg.angular.z}
+        self.get_logger().info('Received StatusData - mac_address: %s, time: %s, controller_voltage: %ld, total_time: %s, controller_temp: %.2f, ssid: %s, rssi: %s' %
+                               (msg.mac_address, msg.time, msg.controller_voltage, msg.total_time, msg.controller_temp, msg.ssid, msg.rssi))
+
+        self.latest_ros_data = {
+            'mac_address': msg.mac_address,
+            'time': msg.time,
+            'controller_voltage': msg.controller_voltage,
+            'total_time': msg.total_time,
+            'controller_temp': msg.controller_temp,
+            'ssid': msg.ssid,
+            'rssi': msg.rssi
+        }
         data = self.latest_ros_data
         print(f"Latest ROS data in subscribe_message: {data}")
 
@@ -26,9 +36,9 @@ class MinimalSubscriber(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    minimal_subscriber = MinimalSubscriber()
-    rclpy.spin(minimal_subscriber)
-    minimal_subscriber.destroy_node()
+    status_data_subscriber = StatusDataSubscriber()
+    rclpy.spin(status_data_subscriber)
+    status_data_subscriber.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':

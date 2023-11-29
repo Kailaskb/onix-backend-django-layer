@@ -3,11 +3,11 @@ import json
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
 import rclpy
-from .subscriber import MinimalSubscriber
+from .subscriber import StatusDataSubscriber
 from threading import Thread
 
 rclpy.init()
-minimal_subscriber_instance = MinimalSubscriber()
+minimal_subscriber_instance = StatusDataSubscriber()
 minimal_subscriber = Thread(target=rclpy.spin, args=(minimal_subscriber_instance,), daemon=True)
 minimal_subscriber.start()
 
@@ -28,7 +28,7 @@ class RobotConsumer(AsyncWebsocketConsumer):
                 self.send_continuous_data = True  # Set the flag to True
 
             while self.send_continuous_data:
-                # Access the get_latest_data method on the MinimalSubscriber instance
+                # Access the get_latest_data method on the StatusDataSubscriber instance
                 latest_data = minimal_subscriber_instance.get_latest_data()
                 print(f"Latest ROS data: {latest_data}")
 
