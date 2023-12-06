@@ -20,8 +20,13 @@ async def connect_and_receive_data():
 
         # Continuously receive and print data from the server
         while True:
-            response = await websocket.recv()
-            print(f"Received data from server: {response}")
+            try:
+                response = await websocket.recv()
+                print(f"Received data from server: {response}")
+            except websockets.exceptions.ConnectionClosed:
+                print("WebSocket connection closed. Exiting loop.")
+                break
 
 if __name__ == "__main__":
     asyncio.get_event_loop().run_until_complete(connect_and_receive_data())
+
