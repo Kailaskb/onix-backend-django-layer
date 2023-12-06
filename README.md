@@ -31,3 +31,9 @@ python subscriber.py
 ```
 python3 subscriber.py
 ```
+
+
+> source the ros layer ws before running the file
+```
+soure path_to_ros_layer/install/setup.bash
+```
