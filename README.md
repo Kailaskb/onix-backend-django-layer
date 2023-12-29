@@ -1,5 +1,8 @@
 # django_ros2_status_push
 #### After installing the required files
+```
+pip install -r requirements.txt
+```
 ### Run these codes
 > Create a virtual environment
 ```
