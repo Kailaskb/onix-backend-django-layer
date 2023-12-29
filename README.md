@@ -12,6 +12,7 @@ python3 -m venv virtual_environment_name
 ```
 source virtual_environment_name/bin/activate
 ```
+run
 ```
 python manage.py makemigrations
 python manage.py migrate
